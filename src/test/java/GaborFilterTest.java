@@ -11,17 +11,24 @@ import java.io.IOException;
  */
 public class GaborFilterTest {
 
+   /**
+    * A Gabor filter test
+    *
+    * @throws IOException - IOException
+    */
    @Test
    public void testImage() throws IOException {
-      File file = new File("./src/test/resources/gaborred-marx.jpg");
-      Image image = ImageIO.read(new File("./src/test/resources/marx.jpg"));
 
+      // Specifying the files
+      File file = new File("./src/test/resources/gaborred-lena.jpg");
+      Image image = ImageIO.read(new File("./src/test/resources/lena.jpg"));
+
+      // Creating buffered image from the given file. NOTE: It's crucial to build the data that way!
       BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
       Graphics g = bufferedImage.getGraphics();
       g.drawImage(image, 0, 0, null);
 
-      BufferedImage gaborredImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-      new GaborFilter(10, 10, 8, 0, Math.PI, 0.5).getConvolveOp().filter(bufferedImage, gaborredImage);
-      ImageIO.write(gaborredImage, "png", file);
+      // Writing the filtered image to disk
+      ImageIO.write(new GaborFilter(16, new double[] {0, Math.PI/4, Math.PI}, 0, 0.5, 1, 3, 3).filter(bufferedImage, null), "jpg", file);
    }
 }
